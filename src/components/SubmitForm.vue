@@ -1,16 +1,30 @@
 <template>
     <div>
-        <form class="form">
+        <form class="form" @submit.prevent="onSubmit()">
             <div class="top-header">
                 <p class="title">Properties</p>
                 <p class="title">Order</p>
             </div>
             <div class="form-content">
-                <div class="form-item">
+                <div 
+                    class="form-item"
+                    v-for="(item, index) in resultData" :key="index"
+                >
                     <div class="item-content">
-                        <div class="number">1</div>
-                        <select name="" id="" required>
+                        <div class="number">{{item.priority}}</div>
+                        <select 
+                            v-model="item.order" 
+                            required
+                        >
                             <option value="" disabled selected hidden>select option</option>
+                            <option 
+                                v-for="(label, index) in data" 
+                                :key="index"
+                                :value="label.name"
+                                
+                            >   
+                                {{label.title}}
+                            </option>
                         </select>
                         <button type="button" class="button button-sort">
                             <img src="../assets/img/sort-down-ASC.svg" alt="sort-button">
@@ -20,17 +34,59 @@
                         <img src="../assets/img/delete.svg" alt="remove-btn">
                     </button>
                 </div>
-                <button type="button" class="button button-create">Add
+                <button
+                    type="button" 
+                    class="button button-create"
+                    @click="createItem()"
+                >   Add
                     <img src="../assets/img/plus.svg" alt="add-button">
                 </button>
                 <button type="submit" class="button button-submit">Submit</button>
             </div>
         </form>
+        <pre>
+            <code>
+                {{resultData}}
+                {{data}}
+            </code>
+        </pre>
     </div>
 </template>
 
 <script>
-export default {};
+
+import {mapState} from 'vuex'
+export default {
+    data() {
+        return {
+          resultData : []          
+        }
+    },
+    mounted() {
+        this.$store.dispatch('getData')
+    },
+    computed: {
+       ...mapState( {
+           data: state => state.form.data
+       })
+    },
+    methods: {   
+       onSubmit() {
+
+       },
+       createItem(){
+           
+           this.resultData.push({
+           order: '',
+           property: 'ASC',
+           priority: this.resultData.length === 0 ? 1 : this.resultData[this.resultData.length-1].priority + 1
+
+           })
+       },
+    
+   }
+ 
+};
 </script>
 
 <style lang="scss">
