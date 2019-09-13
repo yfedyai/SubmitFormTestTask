@@ -2,58 +2,73 @@
     <div>
        <div class="form-item">
             <div class="item-content">
-                <div class="number">{{item.priority}}</div>
-                    <select
-                        v-model="item.order"
-                        required
+                <div class="number">
+                    {{item.priority}}
+                </div>
+                <select
+                    v-model="item.order"
+                    required
+                >
+                    <option value="" disabled selected hidden>select option</option>
+                    <option
+                        v-for="(label, index) in importData"
+                        :key="index"
+                        :value="label.name"
+
+                        :disabled="removeOption(label.name)"
                     >
-                        <option value="" disabled selected hidden>select option</option>
-                        <option
-                            v-for="(label, index) in importData"
-                            :key="index"
-                            :value="label.name"
-                            :disabled="removeOption()"
-                        >
-                            {{label.title}}
-                        </option>
-                    </select>
-                        <button type="button" class="button button-sort"
-                            @click="item.property=toggleProperty(item.property)"
-                        >
-                            <img
-                                :src="item.property === 'ASC' ? require('../assets/img/sort-down-ASC.png') : require('../assets/img/sort-up-DESC.png') "
-                                alt="sort-button"
-                            >
-                        </button>
-                    </div>
-                    <button type="button" class="button" >
-                        <img
-                            src="../assets/img/delete.svg" alt="remove-btn"
-                            @click="removeItem(item.order)"
-                        >
-                    </button>
+                        {{label.title}}
+                    </option>
+                </select>
+                <button type="button" class="button button-sort"
+                    @click="item.property=toggleProperty(item.property)"
+                >
+                    <img
+                        :src="item.property === 'ASC' ? require('../assets/img/sort-down-ASC.png') : require('../assets/img/sort-up-DESC.png') "
+                        alt="sort-button"
+                    >
+                </button>
+            </div>
+            <button type="button" class="button" >
+                <img
+                    src="../assets/img/delete.svg" alt="remove-btn"
+                    @click="removeItem(item.order)"
+                >
+            </button>
         </div>
     </div>
 </template>
 
 <script>
+
+import { mapState } from 'vuex'
+
 export default {
-  props: ['item', 'importData'],
+  props: ['item'],
   data () {
     return {
+
     }
+  },
+  mounted () {
+    this.$store.dispatch('getData')
+  },
+  computed: {
+    ...mapState({
+      importData: state => state.form.importData
+    })
   },
   methods: {
     toggleProperty (property) {
-        
       return property === 'ASC' ? 'DESC' : 'ASC'
-      
     },
     removeItem (index) {
       this.$emit('removeItem', index)
     },
-    removeOption(item){
-         
+    removeOption (name) {
+      return this.$parent.resultData.filter(el =>
+        el.order === name
+      ).length > 0
     }
   }
 }

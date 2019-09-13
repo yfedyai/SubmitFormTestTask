@@ -9,7 +9,6 @@
                 <SelectItem v-for="(item, index) in resultData"
                     :key="index"
                     :item="item"
-                    :importData="importData"
                     @removeItem="removeItem"
                 >
                 </SelectItem >
@@ -23,11 +22,6 @@
                 <button type="submit" class="button button-submit" :disabled="resultData.length===0">Sort</button>
             </div>
         </form>
-        <pre>
-            <code>
-                {{resultData}}
-            </code>
-        </pre>
     </div>
 </template>
 
@@ -35,31 +29,21 @@
 
 import SelectItem from '../components/SelectItem'
 
-import { mapState } from 'vuex'
-
 export default {
   components: {
     SelectItem
   },
   data () {
     return {
-      resultData: [],
+      resultData: []
     }
-  },
-  mounted () {
-    this.$store.dispatch('getData')
-  },
-  computed: {
-    ...mapState({
-      importData: state => state.form.importData
-    })
   },
   methods: {
     onSubmit () {
-      console.log('POST THIS OBJ',JSON.stringify(this.resultData) )
+      console.log('POST THIS OBJ', JSON.stringify(this.resultData))
     },
     createItem () {
-        this.resultData.push({
+      this.resultData.push({
         order: '',
         property: 'ASC',
         priority: this.resultData.length === 0 ? 1 : this.resultData[this.resultData.length - 1].priority + 1
