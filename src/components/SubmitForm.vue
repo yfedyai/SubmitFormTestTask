@@ -16,11 +16,11 @@
                 <button
                     type="button"
                     class="button button-create"
-                    @click="createItem()"
+                    @click="createItem(); "
                 >   Add
                     <img src="../assets/img/plus.svg" alt="add-button">
                 </button>
-                <button type="submit" class="button button-submit">Submit</button>
+                <button type="submit" class="button button-submit" :disabled="resultData.length===0">Sort</button>
             </div>
         </form>
         <pre>
@@ -43,7 +43,7 @@ export default {
   },
   data () {
     return {
-      resultData: []
+      resultData: [],
     }
   },
   mounted () {
