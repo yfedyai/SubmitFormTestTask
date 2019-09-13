@@ -6,36 +6,15 @@
                 <p class="title">Order</p>
             </div>
             <div class="form-content">
-                <div 
-                    class="form-item"
-                    v-for="(item, index) in resultData" :key="index"
+                <SelectItem v-for="(item, index) in resultData"
+                    :key="index"
+                    :item="item"
+                    :importData="importData"
+                    @removeItem="removeItem"
                 >
-                    <div class="item-content">
-                        <div class="number">{{item.priority}}</div>
-                        <select 
-                            v-model="item.order" 
-                            required
-                        >
-                            <option value="" disabled selected hidden>select option</option>
-                            <option 
-                                v-for="(label, index) in data" 
-                                :key="index"
-                                :value="label.name"
-                                
-                            >   
-                                {{label.title}}
-                            </option>
-                        </select>
-                        <button type="button" class="button button-sort">
-                            <img src="../assets/img/sort-down-ASC.svg" alt="sort-button">
-                        </button>                        
-                    </div>
-                    <button type="button" class="button" >
-                        <img src="../assets/img/delete.svg" alt="remove-btn">
-                    </button>
-                </div>
+                </SelectItem >
                 <button
-                    type="button" 
+                    type="button"
                     class="button button-create"
                     @click="createItem()"
                 >   Add
@@ -47,7 +26,6 @@
         <pre>
             <code>
                 {{resultData}}
-                {{data}}
             </code>
         </pre>
     </div>
@@ -55,63 +33,53 @@
 
 <script>
 
-import {mapState} from 'vuex'
+import SelectItem from '../components/SelectItem'
+
+import { mapState } from 'vuex'
+
 export default {
-    data() {
-        return {
-          resultData : []          
-        }
+  components: {
+    SelectItem
+  },
+  data () {
+    return {
+      resultData: []
+    }
+  },
+  mounted () {
+    this.$store.dispatch('getData')
+  },
+  computed: {
+    ...mapState({
+      importData: state => state.form.importData
+    })
+  },
+  methods: {
+    onSubmit () {
+      console.log('POST THIS OBJ',JSON.stringify(this.resultData) )
     },
-    mounted() {
-        this.$store.dispatch('getData')
+    createItem () {
+        this.resultData.push({
+        order: '',
+        property: 'ASC',
+        priority: this.resultData.length === 0 ? 1 : this.resultData[this.resultData.length - 1].priority + 1
+      })
     },
-    computed: {
-       ...mapState( {
-           data: state => state.form.data
-       })
-    },
-    methods: {   
-       onSubmit() {
+    removeItem (index) {
+      this.resultData.splice(index, 1)
+      this.resultData.forEach(element => {
+        element.priority--
+      })
+    }
+  }
 
-       },
-       createItem(){
-           
-           this.resultData.push({
-           order: '',
-           property: 'ASC',
-           priority: this.resultData.length === 0 ? 1 : this.resultData[this.resultData.length-1].priority + 1
-
-           })
-       },
-    
-   }
- 
-};
+}
 </script>
 
 <style lang="scss">
 .form {
     max-width: 450px;
     margin: 0 auto;
-    &-content {
-        display: flex;
-        flex-direction: column;
-        margin-top: 10px;
-    }
-    &-item{
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 15px;
-        
-        
-    }
-    .item-content{
-        display:flex;
-        justify-content: space-between;
-        width: 100%;
-        padding:10px;
-        background: #eef0ee
-    }
 }
 .top-header {
     display: flex;
@@ -140,7 +108,7 @@ img {
         img{
             margin-left: 10px;;
         }
-        
+
     }
     &-submit {
         margin-top: 15px;
@@ -150,7 +118,7 @@ img {
         background: #150ba3;
         text-transform: uppercase;
         padding: 10px 25px;
-        
+
     }
 }
 select {

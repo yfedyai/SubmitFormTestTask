@@ -2,19 +2,18 @@ import axios from 'axios'
 
 export default {
   state: {
-    data: null
+    importData: null
   },
 
   mutations: {
     setData (state, payload) {
-      state.data = payload
+      state.importData = payload
     }
   },
   actions: {
     async getData ({ commit }) {
       try {
-        const response = await axios.get('http://localhost:3000/form')
-        console.log(response.data)
+        const response = await axios.get('/db.json')
         commit('setData', response.data)
       } catch (err) {
         console.log(err)
