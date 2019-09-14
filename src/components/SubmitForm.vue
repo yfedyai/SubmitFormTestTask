@@ -51,7 +51,7 @@ export default {
     },
     removeItem (index) {
       this.resultData.splice(index, 1)
-      this.resultData.forEach(element => {
+      this.resultData.slice(index).forEach(element => {
         element.priority--
       })
     }
@@ -62,7 +62,7 @@ export default {
 
 <style lang="scss">
 .form {
-    max-width: 450px;
+    max-width: 500px;
     margin: 0 auto;
 }
 .top-header {

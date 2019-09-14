@@ -32,7 +32,7 @@
             <button type="button" class="button" >
                 <img
                     src="../assets/img/delete.svg" alt="remove-btn"
-                    @click="removeItem(item.order)"
+                    @click="removeItem(item.priority - 1)"
                 >
             </button>
         </div>
