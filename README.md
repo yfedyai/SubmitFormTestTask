@@ -1,4 +1,6 @@
-# tstech-test
+Result submitted object will be shown in console
+![image](https://user-images.githubusercontent.com/33098616/64939344-6047e180-d869-11e9-9f72-3dd056f3223b.png)
+
 
 ## Project setup
 ```
@@ -15,10 +17,6 @@ npm run serve
 npm run build
 ```
 
-### Run your tests
-```
-npm run test
-```
 
 ### Lints and fixes files
 ```
