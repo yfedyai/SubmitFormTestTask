@@ -8,13 +8,13 @@
                 <select
                     v-model="item.order"
                     required
+                    @change="setItemProperty"
                 >
                     <option value="" disabled selected hidden>select option</option>
                     <option
                         v-for="(label, index) in importData"
                         :key="index"
                         :value="label.name"
-
                         :disabled="removeOption(label.name)"
                     >
                         {{label.title}}
@@ -24,7 +24,7 @@
                     @click="item.property=toggleProperty(item.property)"
                 >
                     <img
-                        :src="item.property === 'ASC' ? require('../assets/img/sort-down-ASC.png') : require('../assets/img/sort-up-DESC.png') "
+                        :src="item.property === 'ASC' ? require('../assets/img/sort-up-DESC.png') : require('../assets/img/sort-down-ASC.png')"
                         alt="sort-button"
                     >
                 </button>
@@ -69,6 +69,13 @@ export default {
       return this.$parent.resultData.filter(el =>
         el.order === name
       ).length > 0
+    },
+    setItemProperty (event) {
+      for (let index = 0; index < this.importData.length; index++) {
+        if (this.importData[index].name === event.target.value) {
+          this.$props.item.property = this.importData[index].orderTypeDefault
+        }
+      }
     }
   }
 }
